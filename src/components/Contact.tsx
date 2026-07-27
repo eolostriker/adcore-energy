@@ -2,28 +2,84 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
-import { appendToGoogleSheet } from '../app/actions';
 
 export const Contact: React.FC = () => {
   const [isSent, setIsSent] = useState(false);
+  const [data, setData] = useState({
+    name: '',
+    email: '',
+    whatsapp: '',
+    city: '',
+    estado: '',
+    tipoImovel: '',
+    conta: '',
+    consumo: '',
+    padrao: '',
+    telhado: '',
+    message: '',
+  });
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const numero = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+
+    const mensagem = encodeURIComponent(`
+☀️ NOVO LEAD - ADCORE ENERGY
+
+👤 Nome: ${data.name}
+📱 WhatsApp: ${data.whatsapp}
+📧 E-mail: ${data.email}
+
+📍 Cidade: ${data.city}/${data.estado}
+
+🏠 Tipo do imóvel: ${data.tipoImovel}
+
+⚡ Conta média: ${data.conta}
+
+🔋 Consumo: ${data.consumo}
+
+🔌 Padrão: ${data.padrao}
+
+🏡 Telhado: ${data.telhado}
+
+📝 Observações:
+${data.message}
+`);
+
+    window.open(
+      `https://wa.me/${numero}?text=${mensagem}`,
+      "_blank"
+    );
+
     setIsSent(true);
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    const data = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      whatsapp: formData.get('whatsapp'),
-      conta: formData.get('conta')
-    };
-    const result = await appendToGoogleSheet(data);
-    if (result) {
-      console.log('Data appended to Google Sheet!');
-    } else {
-      console.error('Failed to append data.');
-    }
-    setTimeout(() => setIsSent(false), 5000);
+
+    setTimeout(() => setIsSent(false), 4000);
+
+    e.currentTarget.reset();
+
+    setData({
+      name: '',
+      email: '',
+      whatsapp: '',
+      city: '',
+      estado: '',
+      tipoImovel: '',
+      conta: '',
+      consumo: '',
+      padrao: '',
+      telhado: '',
+      message: '',
+    });
   };
 
   return (
@@ -57,6 +113,8 @@ export const Contact: React.FC = () => {
                   name='name'
                   required
                   placeholder="Nome completo"
+                  value={data.name}
+                  onChange={handleChange}
                   className="w-full bg-slate-950 border-2 border-slate-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700"
                 />
               </div>
@@ -67,6 +125,8 @@ export const Contact: React.FC = () => {
                   name='email'
                   required
                   placeholder="seu@email.com"
+                  value={data.email}
+                  onChange={handleChange}
                   className="w-full bg-slate-950 border-2 border-slate-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700"
                 />
               </div>
@@ -80,6 +140,8 @@ export const Contact: React.FC = () => {
                   name='whatsapp'
                   required
                   placeholder="(00) 00000-0000"
+                  value={data.whatsapp}
+                  onChange={handleChange}
                   className="w-full bg-slate-950 border-2 border-slate-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700"
                 />
               </div>
@@ -89,6 +151,118 @@ export const Contact: React.FC = () => {
                   type="text"
                   name='conta'
                   placeholder="Ex: R$ 500,00"
+                  value={data.conta}
+                  onChange={handleChange}
+                  className="w-full bg-slate-950 border-2 border-slate-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700"
+                />
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <label className="text-xs font-extrabold uppercase tracking-widest text-slate-500 ml-1">Cidade</label>
+                <input
+                  type="text"
+                  name='city'
+                  required
+                  placeholder="Cidade"
+                  value={data.city}
+                  onChange={handleChange}
+                  className="w-full bg-slate-950 border-2 border-slate-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700"
+                />
+              </div>
+              <div className="space-y-3">
+                <label className="text-xs font-extrabold uppercase tracking-widest text-slate-500 ml-1">Estado</label>
+                <select
+                  name="estado"
+                  value={data.estado}
+                  onChange={handleChange}
+                  className="w-full bg-slate-950 border-2 border-slate-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700"
+                >
+                  <option value="">Estado</option>
+                  <option value="SP">São Paulo</option>
+                  <option value="SC">Santa Catarina</option>
+                  {/* <option value="PR">Paraná</option>
+                  <option value="MG">Minas Gerais</option>
+                  <option value="RJ">Rio de Janeiro</option> */}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <label className="text-xs font-extrabold uppercase tracking-widest text-slate-500 ml-1">Tipo do Imóvel</label>
+                <select
+                  name="tipoImovel"
+                  value={data.tipoImovel}
+                  onChange={handleChange}
+                  className="w-full bg-slate-950 border-2 border-slate-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700"
+                >
+                  <option value="">Tipo do imóvel</option>
+                  <option>Residência</option>
+                  <option>Empresa</option>
+                  <option>Indústria</option>
+                  <option>Fazenda</option>
+                  <option>Condomínio</option>
+                </select>
+              </div>
+              <div className="space-y-3">
+                <label className="text-xs font-extrabold uppercase tracking-widest text-slate-500 ml-1">Padrão de Entrada</label>
+                <select
+                  name="padrao"
+                  value={data.padrao}
+                  onChange={handleChange}
+                  className="w-full bg-slate-950 border-2 border-slate-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700"
+                >
+                  <option value="">Padrão de entrada</option>
+                  <option>Monofásico</option>
+                  <option>Bifásico</option>
+                  <option>Trifásico</option>
+                  <option>Não sei</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <label className="text-xs font-extrabold uppercase tracking-widest text-slate-500 ml-1">Tipo de Telhado</label>
+                <select
+                  name="telhado"
+                  value={data.telhado}
+                  onChange={handleChange}
+                  className="w-full bg-slate-950 border-2 border-slate-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700"
+                >
+                  <option value="">Tipo de telhado</option>
+                  <option>Cerâmica</option>
+                  <option>Metálico</option>
+                  <option>Fibrocimento</option>
+                  <option>Laje</option>
+                  <option>Solo</option>
+                  <option>Outro</option>
+                </select>
+              </div>
+              <div className="space-y-3">
+                <label className="text-xs font-extrabold uppercase tracking-widest text-slate-500 ml-1">Consumo Médio (Kwh)</label>
+                <input
+                  type="text"
+                  name="consumo"
+                  placeholder="Consumo médio (kWh)"
+                  value={data.consumo}
+                  onChange={handleChange}
+                  className="w-full bg-slate-950 border-2 border-slate-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700"
+                />
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-1 gap-8">
+              <div className="space-y-6">
+                {/* <label className="text-xs font-extrabold uppercase tracking-widest text-slate-500 ml-1">Tipo de Telhado</label> */}
+                <textarea
+                  name="message"
+                  placeholder="Conte um pouco sobre seu projeto"
+                  rows={5}
+                  value={data.message}
+                  onChange={handleChange}
                   className="w-full bg-slate-950 border-2 border-slate-800 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-emerald-500 transition-all placeholder:text-slate-700"
                 />
               </div>
@@ -136,6 +310,7 @@ export const Contact: React.FC = () => {
             </div>
             <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Sede</span>
             <p className="text-sm font-bold text-slate-200 mt-1">São Paulo, SP</p>
+            <p className="text-sm font-bold text-slate-200 mt-1">Florianópolis, SC</p>
           </div>
         </div>
       </div>
