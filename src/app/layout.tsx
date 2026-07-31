@@ -20,11 +20,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
-      {/* <head>
+      <head>
         <GoogleTagManager gtmId="GTM-MTG9ZTBM" />
-      </head> */}
+      </head>
       <body className={`${inter.className} text-slate-700 selection:bg-emerald-500 selection:text-white bg-white`}>
-        <GoogleTagManager gtmId="GTM-MTG9ZTBM" />
+        {/* <GoogleTagManager gtmId="GTM-MTG9ZTBM" /> */}
         <div className="min-h-screen flex flex-col">
           <Header />
           <main className="flex-grow">
