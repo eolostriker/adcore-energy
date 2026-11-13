@@ -8,9 +8,57 @@ import { GoogleTagManager } from '@next/third-parties/google';
 
 const inter = Inter({ subsets: ['latin'] });
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://adcoreenergy.com.br';
+
 export const metadata: Metadata = {
-  title: 'ADCORE Energy - Soluções em Energia Solar',
-  description: 'A premium web application for a solar energy solutions company, featuring specialized sections for about us, services, and contact information with a modern, high-tech aesthetic.',
+  metadataBase: new URL(siteUrl),
+
+  title: 'ADCORE Energy | Soluções em Energia Solar',
+
+  description:
+    'A ADCORE Energy oferece soluções em energia solar fotovoltaica, com projetos personalizados para economia na conta de luz, eficiência energética e sustentabilidade. Conheça nossas soluções e solicite uma avaliação técnica pelo WhatsApp!',
+
+  applicationName: 'ADCORE Energy',
+
+  alternates: {
+    canonical: '/',
+  },
+
+  openGraph: {
+    type: 'website',
+    locale: 'pt_BR',
+    url: '/',
+    siteName: 'ADCORE Energy',
+    title: 'ADCORE Energy | Soluções em Energia Solar',
+
+    description:
+      'Projetos de energia solar fotovoltaica personalizados para quem busca economia, eficiência e sustentabilidade. Conheça a ADCORE Energy e solicite sua avaliação técnica!',
+
+    images: [
+      {
+        url: '/public/LOGO VERT 800 PRETO.png',
+        width: 1200,
+        height: 630,
+        alt: 'ADCORE Energy - Soluções em Energia Solar',
+      },
+    ],
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ADCORE Energy | Soluções em Energia Solar',
+
+    description:
+      'Conheça nossas soluções em energia solar fotovoltaica e solicite uma avaliação técnica!',
+
+    images: ['/public/LOGO VERT 800 PRETO.png',],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  }
 };
 
 export default function RootLayout({
