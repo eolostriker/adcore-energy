@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import logo from "../../public/LOGO HORIZ ADCORE.png";
+import logo from "../../public/images/LOGO HORIZ ADCORE.png";
 import "../app/globals.css";
 
 export const Logo: React.FC<{ className?: string }> = ({ className = "h-8" }) => {
