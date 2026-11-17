@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 
     images: [
       {
-        url: '/images/adcore-social.png',
+        url: '/images/adcore-social.jpg',
         width: 1200,
         height: 630,
         alt: 'ADCORE Energy - Soluções em Energia Solar',
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     description:
       'Conheça nossas soluções em energia solar fotovoltaica e solicite uma avaliação técnica!',
 
-    images: ['/images/adcore-social.png'],
+    images: ['/images/adcore-social.jpg'],
   },
 
   robots: {
